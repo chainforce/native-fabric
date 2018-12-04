@@ -1,9 +1,10 @@
 /*
-Copyright IBM Corp. All Rights Reserved.
+Copyright Binh Nguyen. All Rights Reserved.
 
 SPDX-License-Identifier: Apache-2.0
 */
 
+// package name must be `main`
 package main
 
 import (
@@ -18,12 +19,15 @@ import (
 type SimpleChaincode struct {
 }
 
+// New creates and returns an empty instance of the chaincode. This is a
+// System chaincode required constructor. It is called once when the peer starts up
 func New() shim.Chaincode {
 	return &SimpleChaincode{}
 }
 
+// Init is a required chaincode interface. It is called whenever the peer joins
+// a channel
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Println("example02 Init")
 	return shim.Success(nil)
 }
 
@@ -63,8 +67,8 @@ func (t *SimpleChaincode) initialize(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
+// Invoke is a required chaincode interface. It is a dispatcher of transactions
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Println("example02 Invoke")
 	function, args := stub.GetFunctionAndParameters()
 	switch function {
 	case "initialize":
