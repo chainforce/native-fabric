@@ -1,0 +1,4 @@
+#!/bin/bash
+FABRIC_CFG_PATH=$FABCONF \
+ORDERER_GENERAL_GENESISPROFILE=SampleSingleMSPSolo \
+$FABBIN/orderer
