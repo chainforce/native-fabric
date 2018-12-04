@@ -13,7 +13,7 @@ make native
 ```
 
 The binaries are stored in `.build/bin`. Since we want to use Go Plugin, we need to explicitly enable it
-when we build `peer` as it is disabled by default. Rebuild the `peer` again with the following commands:
+when we build `peer` as it is disabled by default. Rebuild the `peer` with the following commands:
 ```
 rm .build/bin/peer 
 GO_TAGS+=pluginsenabled make peer
@@ -25,7 +25,7 @@ export FABBIN=$GOPATH/src/github.com/hyperledger/fabric/.build/bin
 export FABCONF=$GOPATH/src/github.com/hyperledger/fabric/sampleconfig
 ```
 
-The first variable `FABBIN` points to the location where Fabric binaries are, and the second one `FABCONF` points to the sample configuration shipped with Fabric source code. 
+The first variable `FABBIN` points to the location where Fabric binaries are, and the second one `FABCONF` points to the sample configuration shipped with Fabric source code. You may use your own configuration and replace as appropriate throughout this document.
 
 ## Smart Contract as Go Plugin
 We use System Chaincode to implement our smart contract. There are differences between a System Chaincode and a Docker-based Chaincode. Specifically a System Chaincode differs on: 
@@ -91,20 +91,27 @@ The output is `mych.tx`, which contains the data to create a channel. We use tha
 FABRIC_CFG_PATH=$FABCONF $FABBIN/peer channel create -f mych.tx -c mych -o 127.0.0.1:7050
 ```
 
-The output is `mych.block`, which is a configuration block containing the artifacts about the channel that we can use to instruct appropriate peers to join the channel. Since our simple network has only 1 peer, we tell it to join the channel:
+The output of this command is `mych.block`, which is a configuration block containing the artifacts about the channel that we can use to instruct appropriate peers to join the channel. Since our simple network has only 1 peer, we tell it to join the channel:
 ```
 FABRIC_CFG_PATH=$FABCONF $FABBIN/peer channel join -b mych.block
 ```
 
-### Send Transactions to Smart Contract
-FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["initialize", "a", "100", "b","200"]}'
+Now the network (1 peer and 1 orderer) is ready to process transaction according to our smart contract **example02** on channel `mych`. Note that we don't have to **install** and **instantiate** this smart contract like a Docker-based one.
 
+## Send Transactions to Smart Contract
+We can send all the transactions as in the normal **example02** smart contract. However, as mentioned above, with System Chaincode, we have to explicitly initialize our smart contract assets first, as implemented in our **example02** plugin.
+```
+FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["initialize", "a", "100", "b","200"]}'
+```
+
+After successfully initialized, we can send any other **example02**'s transactions. For example:
+```
 FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["transfer","a","b","10"]}'
 
 FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode query -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["query","a"]}'
+```
 
-
-### Clean up
+## Clean up
 Fabric stores data at `/var/hyperledger/production`. We also created `mych.tx` and `mych.block`. You can rerun the network, and it will pick up from last time. However, if you are done and want to clean up everything, run the following commands:
 ```
 rm -rf /var/hyperledger/production
