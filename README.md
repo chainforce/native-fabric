@@ -1,4 +1,4 @@
-# Native Fabric
+# Native Hyperledger Fabric
 This project prepares **Hyperledger Fabric** to run natively on OSX without using Docker. Smart contracts are
 written in Go and installed as Go Plugins, so no needs for chaincode Docker containers. The same approach may be 
 applied on other platforms.
