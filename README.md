@@ -34,7 +34,7 @@ We use System Chaincode to implement our smart contract. There are differences b
 3. Function `Init` is called when the **peer** joins a channel but no ledger-write should be performed in this function as there is no transaction context
 4. Only 1 instance of a System Chaincode exists (not an instance per channel though that might be more desirable in some use cases)
 
-We are going to demonstrate this by using **example02** chaincode shipped with Fabric source at **examples/chaincode/go/example02**. The modified code is in the file [example02](#example02), which includes the new package name and the constructor. We also changed the `Init` function into 2 functions: a mandatory `Init` interface implementation and a new `initialize` function to set the smart contract's variables.
+We are going to demonstrate this by using **example02** chaincode shipped with Fabric source at **examples/chaincode/go/example02**. The modified code is in the file [example02](https://github.com/chainforce/native-fabric/blob/master/example02.go), which includes the new package name and the constructor. We also changed the `Init` function into 2 functions: a mandatory `Init` interface implementation and a new `initialize` function to set the smart contract's variables.
 
 Build the plugin as follow:
 ```
