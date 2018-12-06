@@ -31,8 +31,9 @@ The first variable `FABBIN` points to the location where Fabric binaries are, an
 We use System Chaincode to implement our smart contract. There are differences between a System Chaincode and a Docker-based Chaincode. Specifically a System Chaincode differs on: 
 1. Go package must be named `main`
 2. A constructor `func New() shim.Chaincode`
-3. Function `Init` is called when the **peer** joins a channel but no ledger-write should be performed in this function as there is no transaction context
+3. Function `Init` is called when the **peer** joins a channel but no ledger-write should be performed in this function as there is no transaction context like `instantiate` for Docker-based chaincode
 4. Only 1 instance of a System Chaincode exists (not an instance per channel though that might be more desirable in some use cases)
+5. There is no `upgrade` transaction buit-in 
 
 We are going to demonstrate this by using **example02** chaincode shipped with Fabric source at **examples/chaincode/go/example02**. The modified code is in the file [example02](https://github.com/chainforce/native-fabric/blob/master/example02.go), which includes the new package name and the constructor. We also changed the `Init` function into 2 functions: a mandatory `Init` interface implementation and a new `initialize` function to set the smart contract's variables.
 
