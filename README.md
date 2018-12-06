@@ -97,23 +97,23 @@ The output of this command is `mych.block`, which is a configuration block conta
 FABRIC_CFG_PATH=$FABCONF $FABBIN/peer channel join -b mych.block
 ```
 
-Now the network (1 peer and 1 orderer) is ready to process transaction according to our smart contract **example02** on channel `mych`. Note that we don't have to **install** and **instantiate** this smart contract like a Docker-based one.
+Now the network (1 peer and 1 orderer) is ready to process transactions according to our smart contract **example02** on channel `mych`. Note that we don't have to **install** and **instantiate** this smart contract like a Docker-based one.
 
 ## Send Transactions to Smart Contract
 We can send all the transactions as in the normal **example02** smart contract. However, as mentioned above, with System Chaincode, we have to explicitly initialize our smart contract assets first, as implemented in our **example02** plugin.
 ```
-FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["initialize", "a", "100", "b","200"]}'
+FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -C mych -n example02 -c '{"Args":["initialize", "a", "100", "b","200"]}'
 ```
 
 After successfully initialized, we can send any other **example02**'s transactions. For example:
 ```
-FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["transfer","a","b","10"]}'
+FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode invoke -C mych -n example02 -c '{"Args":["transfer","a","b","10"]}'
 
-FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode query -o 127.0.0.1:7050 -C mych -n example02 -c '{"Args":["query","a"]}'
+FABRIC_CFG_PATH=$FABCONF $FABBIN/peer chaincode query -C mych -n example02 -c '{"Args":["query","a"]}'
 ```
 
 ## Clean up
-Fabric stores data at `/var/hyperledger/production`. We also created `mych.tx` and `mych.block`. You can rerun the network, and it will pick up from last time. However, if you are done and want to clean up everything, run the following commands:
+Fabric stores data at `/var/hyperledger/production`. We also created `mych.tx` and `mych.block`. You can rerun the network, and it will pick up from the last time. However, if you are done and want to clean up everything, run the following commands:
 ```
 rm -rf /var/hyperledger/production
 rm mych.tx mych.block
