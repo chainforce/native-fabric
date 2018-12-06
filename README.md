@@ -19,7 +19,7 @@ rm .build/bin/peer
 GO_TAGS+=pluginsenabled make peer
 ```
 
-At this point, all the required binaries to run Fabric natively on OSX are ready in `.build/bin` directory. You may copy them to you working directory or run them directly from here. The rest of this document assumes the following 2 environment variables:
+At this point, all the required binaries to run Fabric natively on OSX are ready in `.build/bin` directory. You may copy them to your working directory or run them directly from here. The rest of this document assumes the following 2 environment variables:
 ```
 export FABBIN=$GOPATH/src/github.com/hyperledger/fabric/.build/bin
 export FABCONF=$GOPATH/src/github.com/hyperledger/fabric/sampleconfig
